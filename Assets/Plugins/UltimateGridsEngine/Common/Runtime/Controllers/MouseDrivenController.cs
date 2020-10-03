@@ -21,7 +21,7 @@ public class MouseDrivenController:MonoBehaviour {
     protected virtual void DetectMouse() {
         if (Input.GetMouseButtonDown(0)) {
             if (GridManager.Instance.m_HoveredGridTile != null) {
-               _characterPathfinder.SetNewDestination(GridManager.Instance.m_HoveredGridTile); 
+               _characterPathfinder.SetNewDestination(GridManager.Instance.m_HoveredGridTile);
             }
         }
     }
