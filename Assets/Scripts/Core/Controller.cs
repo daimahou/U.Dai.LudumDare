@@ -35,9 +35,15 @@ namespace Core
             
             Assert.That(characterIndex < m_controllableCharacters.Count);
             
-            if (m_possessedCharacter) m_possessedCharacter.GetComponent<GridMovement>().OnMovementEnd -= MovementEnded;
+            if (m_possessedCharacter)
+            {
+                m_possessedCharacter.GetComponent<GridMovement>().OnMovementEnd -= MovementEnded;
+                m_possessedCharacter.SetHighlight(false);
+            }
+            
             m_possessedCharacter = m_controllableCharacters[characterIndex];
             m_possessedCharacter.GetComponent<GridMovement>().OnMovementEnd += MovementEnded;
+            m_possessedCharacter.SetHighlight(true);
             
             // reset memory
             m_possessedCharacter.OverrideMemory();

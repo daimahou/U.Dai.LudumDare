@@ -7,7 +7,11 @@ namespace Core
     public class Character : MonoBehaviour
     {
         private MoveHandler m_moveHandler;
-        [ShowInInspector] private Memory m_memory;
+        
+        [ShowInInspector, ReadOnly] 
+        private Memory m_memory;
+
+        [SerializeField] private GameObject m_highlight;
 
         private bool m_memoryOverride;
 
@@ -21,6 +25,8 @@ namespace Core
         {
             m_memory = memory;
         }
+
+        public void SetHighlight(bool b) => m_highlight.SetActive(b);
 
         public void OverrideMemory() => m_memoryOverride = true;
 
