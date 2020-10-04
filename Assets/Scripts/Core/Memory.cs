@@ -9,11 +9,11 @@ namespace Core
     public class Memory
     {
         [ShowInInspector] private readonly List<Vector2Int> m_recordedMoves = new List<Vector2Int>();
-        
-        [ShowInInspector] private int i;
-        public bool IsEmpty => i >= m_recordedMoves.Count;
+        public bool IsEmpty => Position >= m_recordedMoves.Count;
+        public bool HasStopped => Position < 0;
+        public int Position { get; set; }
 
-        public void ResetPosition() => i = 0;
+        public void ResetPosition() => Position = 0;
         
         public void ResetMemory()
         {
@@ -28,8 +28,8 @@ namespace Core
 
         public Vector2Int GetNextMove()
         {
-            var move = m_recordedMoves[i];
-            i++;
+            var move = m_recordedMoves[Position];
+            Position++;
             return move;
         }
     }

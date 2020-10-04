@@ -15,10 +15,20 @@ namespace Core
 
         private bool m_memoryOverride;
 
+        [SerializeField] private Material m_movementCompleteMaterial;
+        [SerializeField] private Material m_movementFailedMaterial;
+        private MeshRenderer m_meshRenderer;
+        public bool IsDead { get; set; }
+
         [Inject]
         private void Construct(MoveHandler moveHandler)
         {
             m_moveHandler = moveHandler;
+        }
+
+        private void Awake()
+        {
+            m_meshRenderer = GetComponentInChildren<MeshRenderer>();
         }
 
         public void InitializeMemory(Memory memory)
@@ -43,9 +53,17 @@ namespace Core
 
         public void ExecuteMemoryStep()
         {
-            if (m_memory == null || m_memory.IsEmpty) return;
+            if (m_memory.HasStopped) return;
+            
+            if (m_memory == null || m_memory.IsEmpty)
+            {
+                m_meshRenderer.material = m_movementCompleteMaterial;
+                return;
+            }
 
-            m_moveHandler.Move(m_memory.GetNextMove());
+            var movementResult = m_moveHandler.Move(m_memory.GetNextMove());
+
+            if (movementResult != MovementResult.Moved) Kill();
         }
 
         private void Record(Vector2Int actionDirection) => m_memory.Record(actionDirection);
@@ -57,5 +75,12 @@ namespace Core
         }
 
         public void ResetPosition() => m_memory.ResetPosition();
+
+        public void Kill()
+        {
+            m_meshRenderer.material = m_movementFailedMaterial;
+            m_memory.Position = -1;
+            IsDead = true;
+        }
     }
 }

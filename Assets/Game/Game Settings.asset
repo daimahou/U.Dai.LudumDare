@@ -19,3 +19,6 @@ MonoBehaviour:
     m_swapAxis: 1
     m_invertXAxis: 0
     m_invertYAxis: 1
+    m_idleMaterial: {fileID: 2100000, guid: 28ac039a020ff254cb7e78f1d792ed69, type: 2}
+    m_selectedMaterial: {fileID: 2100000, guid: c6282ea16f67188478f79ad0d1122286,
+      type: 2}

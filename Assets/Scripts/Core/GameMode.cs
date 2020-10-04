@@ -8,10 +8,9 @@ namespace Core
     [UsedImplicitly]
     public class GameMode : IInitializable
     {
-        private ZenjectSceneLoader m_sceneLoader;
+        private readonly ZenjectSceneLoader m_sceneLoader;
 
         private int m_currentSceneIndex = -1;
-        private string m_currentLevel = "default_level";
 
         private MemoryLoop m_memoryLoop;
         
@@ -44,9 +43,16 @@ namespace Core
             if(charC) charC.InitializeMemory(m_memoryC);
         }
 
-        public void LoadScene()
+        private void Load()
         {
-            m_sceneLoader.LoadScene(m_currentLevel, LoadSceneMode.Single, container => { InitializeMemory(); });
+            ResetMemory();
+            m_sceneLoader.LoadScene(m_currentSceneIndex, LoadSceneMode.Single, container => { InitializeMemory(); });
+        }
+
+        public void LoadScene(int index)
+        {
+            m_currentSceneIndex = index;
+            Load();
         }
         
         public void ReloadCurrentScene(int characterIndex)
@@ -56,8 +62,21 @@ namespace Core
                 container =>
                 {
                     InitializeMemory();
-                    Object.FindObjectOfType<Controller>().Possess(characterIndex);
+                    Object.FindObjectOfType<Controller>().m_controlledCharacterIndex = characterIndex;
                 });
+        }
+
+        public void LoadNextLevel()
+        {
+            m_currentSceneIndex++;
+            Load();
+        }
+
+        private void ResetMemory()
+        {
+            m_memoryA.ResetMemory();
+            m_memoryB.ResetMemory();
+            m_memoryC.ResetMemory();
         }
     }
 }

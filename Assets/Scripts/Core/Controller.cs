@@ -11,17 +11,19 @@ namespace Core
     public sealed class Controller : MonoBehaviour
     {
         [SerializeField] private List<Character> m_controllableCharacters;
+        private List<Spikes> m_spikes;
 
         private Vector2Int m_currentInput = Vector2Int.zero;
-        private Vector2Int m_queuedInput = Vector2Int.zero;
 
         private Settings m_settings;
         private GameMode m_gameMode;
         
         private Character m_possessedCharacter;
+        public int m_controlledCharacterIndex;
 
         private float m_lastProcessedTime;
-        
+        private static readonly int s_active = Animator.StringToHash("Active");
+
         [Inject]
         private void Construct(Settings settings, GameMode gameMode)
         {
@@ -29,25 +31,31 @@ namespace Core
             m_gameMode = gameMode;
         }
         
+        private void Start()
+        {
+            Possess(m_controlledCharacterIndex);
+        }
+        
         public void Possess(int characterIndex)
         {
             FindCharactersInScene();
+            m_spikes = FindObjectsOfType<Spikes>().ToList();
             
             Assert.That(characterIndex < m_controllableCharacters.Count);
             
             if (m_possessedCharacter)
             {
-                m_possessedCharacter.GetComponent<GridMovement>().OnMovementEnd -= MovementEnded;
-                m_possessedCharacter.SetHighlight(false);
+                m_possessedCharacter.GetComponentInChildren<Animator>().SetBool(s_active, false);
+                m_possessedCharacter.GetComponentInChildren<MeshRenderer>().material = m_settings.m_idleMaterial;
             }
             
             m_possessedCharacter = m_controllableCharacters[characterIndex];
-            m_possessedCharacter.GetComponent<GridMovement>().OnMovementEnd += MovementEnded;
-            m_possessedCharacter.SetHighlight(true);
+            m_possessedCharacter.GetComponentInChildren<Animator>().SetBool(s_active, true);
             
             // reset memory
             m_possessedCharacter.OverrideMemory();
             m_controllableCharacters.Where(x => x != m_possessedCharacter).ForEach(x => x.ResetPosition());
+            m_possessedCharacter.GetComponentInChildren<MeshRenderer>().material = m_settings.m_selectedMaterial;
         }
 
         private void FindCharactersInScene()
@@ -63,8 +71,7 @@ namespace Core
         {
             if (SwitchCharacter()) return;
             
-            m_currentInput = GetKeyboardInput();
-            ExecuteInput();
+            if(GetKeyboardInput()) ExecuteInput();
         }
 
         private bool SwitchCharacter()
@@ -93,7 +100,7 @@ namespace Core
             return true;
         }
 
-        private Vector2Int GetKeyboardInput() 
+        private bool GetKeyboardInput() 
         {
             var invertX = m_settings.m_invertXAxis ? -1 : 1;
             var invertY = m_settings.m_invertYAxis ? -1 : 1;
@@ -105,56 +112,35 @@ namespace Core
             var flag = Input.GetButtonDown("Up") || 
                        Input.GetButtonDown("Down") || 
                        Input.GetButtonDown("Left") ||
-                       Input.GetButtonDown("Right");
+                       Input.GetButtonDown("Right") || 
+                       Input.GetKeyDown(KeyCode.Space);
             
-            return flag ? input.ToVector2Int() : Vector2Int.zero;
+            m_currentInput = flag ? input.ToVector2Int() : Vector2Int.zero;
+
+            return flag;
         }
         
         private void ExecuteInput(Vector2Int? direction = null)
         {
+            if (m_possessedCharacter.IsDead) return;
+            
             var actionDirection = direction ?? m_currentInput;
             
-            if (actionDirection == Vector2Int.zero)
-                return;
-            
             var time = Time.time;
-
-            Debug.Log($"t:{time} :: {m_lastProcessedTime} :: {time - m_lastProcessedTime}");
             if (time - m_lastProcessedTime < .15f) return;
-            
             m_lastProcessedTime = time;
-
-            var movementResult = m_possessedCharacter.Move(actionDirection);
-
-            Debug.Log($"{movementResult}");
-            // Queue the desired input if the movement is currently in cooldown
-            if (movementResult == MovementResult.Cooldown) {
-                m_queuedInput = m_currentInput;
-                return;
+            
+            if (actionDirection != Vector2Int.zero)
+            {
+                var movementResult = m_possessedCharacter.Move(actionDirection);
+                if (movementResult == MovementResult.Cooldown) return;
             }
 
             // If movement was successful or failed for some other reason we remove the current input
             m_currentInput = Vector2Int.zero;
             
             m_controllableCharacters.Where(x => x != m_possessedCharacter).ForEach(x => x.ExecuteMemoryStep());
-        }
-
-        private void ExecuteQueuedInput()
-        {
-            // If there is not queued input direction
-            if (m_queuedInput == Vector2Int.zero) return;
-
-            var queuedInput = m_queuedInput;
-            ClearQueuedInput();
-            ExecuteInput(queuedInput);
-        }
-
-        private void ClearQueuedInput() => m_queuedInput = Vector2Int.zero;
-
-        // Callback for the movement ended on GridMovement, used to execute queued input
-        private void MovementEnded(GridMovement movement, GridTile fromGridPos, GridTile toGridPos) 
-        {
-            ExecuteQueuedInput();
+            m_spikes.ForEach(x => x.Toggle());
         }
         
         [Serializable]
@@ -163,6 +149,10 @@ namespace Core
             public bool m_swapAxis;
             public bool m_invertXAxis;
             public bool m_invertYAxis;
+
+            public Material m_idleMaterial;
+            public Material m_selectedMaterial;
+            public Material m_stuckMaterial;
         }
     }
 }

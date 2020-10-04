@@ -390,6 +390,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_highlight: {fileID: 6791136290951273870}
+  m_movementCompleteMaterial: {fileID: 2100000, guid: 0c4a99c2f61f58a4cb8f4f7c7b17b576,
+    type: 2}
+  m_movementFailedMaterial: {fileID: 2100000, guid: d3dd5743b8bf1304b88e3d1ae7ce79a4,
+    type: 2}
 --- !u!1 &6456392780797377419
 GameObject:
   m_ObjectHideFlags: 0

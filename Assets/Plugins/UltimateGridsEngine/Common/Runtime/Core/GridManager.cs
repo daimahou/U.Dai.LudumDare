@@ -519,7 +519,7 @@ public class GridManager : MonoBehaviour
         // Check if there is another tile at the target position
         if (ExistsTileAtPosition(gridPosition))
         {
-            //Debug.Log("Couldn't move the tile to the target position, there is another tile there.");
+            Debug.Log("Couldn't move the tile to the target position, there is another tile there.");
             return;
         }
         RemoveGridTile(gridTile);

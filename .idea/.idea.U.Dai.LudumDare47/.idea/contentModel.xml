@@ -8,6 +8,16 @@
       <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="Content" t="Include">
+          <e p="PolygonPrototype" t="Include">
+            <e p="Shaders" t="Include">
+              <e p="Prototype_Glass_Global.shader" t="Include" />
+              <e p="Prototype_Glass_Object.shader" t="Include" />
+              <e p="Prototype_Global.shader" t="Include" />
+              <e p="Prototype_Object.shader" t="Include" />
+            </e>
+          </e>
+        </e>
         <e p="Plugins" t="Include">
           <e p="ConsolePro" t="Include">
             <e p="ConsoleProDebug.cs" t="Include" />
@@ -1265,7 +1275,10 @@
           <e p="Core" t="Include">
             <e p="Character.cs" t="Include" />
             <e p="Controller.cs" t="Include" />
+            <e p="Door.cs" t="Include" />
+            <e p="Elevator.cs" t="Include" />
             <e p="GameMode.cs" t="Include" />
+            <e p="Goal.cs" t="Include" />
             <e p="Installers" t="Include">
               <e p="CharacterInstaller.cs" t="Include" />
               <e p="GameInstaller.cs" t="Include" />
@@ -1274,6 +1287,7 @@
             <e p="Memory.cs" t="Include" />
             <e p="MemoryLoop.cs" t="Include" />
             <e p="MoveHandler.cs" t="Include" />
+            <e p="Spikes.cs" t="Include" />
           </e>
         </e>
       </e>
