@@ -1,6 +1,5 @@
 using System;
 using JetBrains.Annotations;
-using ModestTree;
 using UnityEngine;
 
 namespace Core
@@ -22,10 +21,17 @@ namespace Core
 
         public MovementResult Move(Vector2Int direction)
         {
-            Assert.That(direction != Vector2Int.zero);
-            
             var targetPosition = m_gridObject.m_GridPosition + direction;
             return m_gridMovement.TryMoveToNeighborInPosition(targetPosition, m_settings.m_animateMovement, m_settings.m_rotateTowardsDirection);
+        }
+
+        public bool CanMove(Vector2Int direction)
+        {
+            var targetPosition = m_gridObject.m_GridPosition + direction;
+
+            var tile = GridManager.Instance.GetGridTileAtPosition(targetPosition);
+
+            return tile != null && tile.CanMoveToTile();
         }
 
         [Serializable]

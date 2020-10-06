@@ -12,6 +12,7 @@ namespace Core
         public bool IsEmpty => Position >= m_recordedMoves.Count;
         public bool HasStopped => Position < 0;
         public int Position { get; set; }
+        public int Count => m_recordedMoves.Count;
 
         public void ResetPosition() => Position = 0;
         

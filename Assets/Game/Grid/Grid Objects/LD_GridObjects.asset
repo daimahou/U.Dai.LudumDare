@@ -16,6 +16,12 @@ MonoBehaviour:
   - m_GridObject: {fileID: 6456392780585831952, guid: be2fb0caa4264ce4cbad4ec3913152a7,
       type: 3}
     m_InitialOrientation: 0
+  - m_GridObject: {fileID: 6456392780585831952, guid: 7ce0f3f9928c2be428f386cc9a16881c,
+      type: 3}
+    m_InitialOrientation: 0
+  - m_GridObject: {fileID: 6456392780585831952, guid: 7960f9b455a4fe74393e9376f2b093b0,
+      type: 3}
+    m_InitialOrientation: 0
   - m_GridObject: {fileID: 8759968103932430576, guid: 924d2dc317562284ba899dc9f2c977f9,
       type: 3}
     m_InitialOrientation: 0
@@ -26,6 +32,9 @@ MonoBehaviour:
       type: 3}
     m_InitialOrientation: 0
   - m_GridObject: {fileID: 2919140156403470499, guid: e57afbb396c695c409800cf63a6a26e4,
+      type: 3}
+    m_InitialOrientation: 0
+  - m_GridObject: {fileID: 5831227342325813501, guid: 55f6d6a2bb2314c479c4d20f63ac94e2,
       type: 3}
     m_InitialOrientation: 0
   m_SelectedGridObjectBrushIndex: 4

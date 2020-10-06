@@ -12,7 +12,7 @@ namespace Core
         
         [SerializeField] private int m_lowHeight = 0;
         [SerializeField] private int m_heightHeight = 1;
-        [SerializeField] private int m_offset = -1;
+        [SerializeField] private float m_offset = -1;
 
         private void Awake()
         {
@@ -33,8 +33,8 @@ namespace Core
 
             tileTransform.position = newPos;
 
-            transform.position = newPos - Vector3.up * m_offset;
-            if(m_occupyingObject) m_occupyingObject.transform.position = newPos - Vector3.up * m_offset;
+            transform.position = newPos + Vector3.up;
+            if(m_occupyingObject) m_occupyingObject.transform.position = newPos + Vector3.up;
         }
 
         [UsedImplicitly]
@@ -48,8 +48,8 @@ namespace Core
 
             tileTransform.position = newPos;
 
-            transform.position = newPos - Vector3.up * m_offset;
-            if(m_occupyingObject)  m_occupyingObject.transform.position = newPos - Vector3.up * m_offset;
+            transform.position = newPos + Vector3.up;
+            if(m_occupyingObject)  m_occupyingObject.transform.position = newPos + Vector3.up;
         }
     }
 }

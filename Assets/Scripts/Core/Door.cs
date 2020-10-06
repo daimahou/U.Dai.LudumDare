@@ -5,6 +5,8 @@ namespace Core
 {
     public class Door : MonoBehaviour
     {
+        [SerializeField] private bool m_opened;
+        
         private Animator m_animator;
         private InteractOnGridObject m_interactOnGridObject;
         private MovementBlocker m_movementBlocker;
@@ -23,7 +25,11 @@ namespace Core
             m_interactOnGridObject.m_OnExitTile.AddListener(() =>
             {
                 m_occupied = false;
-                if(m_closing) Close();});
+                if(m_closing) Close();
+                
+            });
+            
+            if(m_opened) Open();
         }
 
         [UsedImplicitly]

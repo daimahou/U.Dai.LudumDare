@@ -12,7 +12,14 @@ public class InteractOnGridObject : InteractiveObject {
         m_OnEnterTile.Invoke();
     }
 
-    protected override void OnExitTileMethod(GridObject gridObject, GridTile gridTile) {
+    private IEnumerator Exit()
+    {
+        yield return new WaitForSeconds(.1f);
         m_OnExitTile.Invoke();
+    }
+
+    protected override void OnExitTileMethod(GridObject gridObject, GridTile gridTile)
+    {
+        StartCoroutine(Exit());
     }
 }
