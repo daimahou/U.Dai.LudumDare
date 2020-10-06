@@ -21,3 +21,5 @@ Coordinate the movement of each cube to unlock the exit !!!
 
 
 Thank you for checking my game out ! 
+
+Itch.io Link : https://daimahoustudio.itch.io/ludum-dare-47-stuck-in-a-loop
